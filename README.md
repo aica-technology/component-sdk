@@ -88,6 +88,6 @@ This install all the needed dependencies and allows to build and test components
 
 To build the development image for the `template_component_package` you would run:
 ```console
-cd source/template_component_package || DOCKER_BUILDKIT=1 docker build . -t template-component-dev:latest
+cd source/template_component_package && DOCKER_BUILDKIT=1 docker build . -t template-component-dev:latest
 ```
 where `template-component-dev:latest` is the name and tag you desire for your local image.
