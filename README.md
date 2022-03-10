@@ -83,11 +83,17 @@ Python packages can be installed by adding a `requirements.txt` file in the crea
 It should contain all the needed python modules, eventually tagged by desired version.
 
 ## Building a development image
-The created component package contains a [Dockerfile](./source/template_component_package/Dockerfile) that install the component package on top of a development image.
-This install all the needed dependencies and allows to build and test components from an IDE connected in ssh.
+The created component package contains a [Dockerfile](./source/template_component_package/Dockerfile) that installs the component package on top of a development image.
+This installs all the needed dependencies and allows to build and test components from an IDE connected in ssh.
 
 To build the development image for the `template_component_package` you would run:
 ```console
-cd source/template_component_package && DOCKER_BUILDKIT=1 docker build . -t template-component-dev:latest
+cd source/template_component_package && DOCKER_BUILDKIT=1 docker build . -t template-component-pkg-dev:latest
 ```
-where `template-component-dev:latest` is the name and tag you desire for your local image.
+where `template-component-pkg-dev:latest` is the name and tag you desire for your local image.
+
+Using the `aica-docker` utility scripts, you can serve the development image to use it in a configured IDE for remote development:
+```console
+aica-docker server template-component-pkg-dev:latest -p 7777
+```
+where the `-p <port>` option can be replaced by any port number available.
