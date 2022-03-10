@@ -1,0 +1,111 @@
+name: Check for updated upstream images
+
+# Run scheduled workflow
+on:
+  schedule:
+    - cron: '00 4,14 * * MON-FRI'
+  workflow_dispatch:
+
+env:
+  CI_BRANCH: 'ci'
+
+jobs:
+
+  check-hash:
+    runs-on: ubuntu-latest
+    name: Check latest hash of ros2-modulo:galactic image
+    outputs:
+      galactic_id: ${{ steps.check_galactic.outputs.id }}
+      latest_rebuild: ${{ steps.check_galactic.outputs.rebuild }}
+      galactic_devel_id: ${{ steps.check_galactic_devel.outputs.id }}
+      devel_rebuild: ${{ steps.check_galactic_devel.outputs.rebuild }}
+    steps:
+      - name: Checkout CI branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.CI_BRANCH }}
+
+      - name: Check lastest hash of ros2-modulo:galactic image
+        id: check_galactic
+        run: |
+          curl -o ros2-modulo-galactic-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/galactic-hash
+          NEW_HASH=$(cat ./ros2-modulo-galactic-hash || echo '')
+          OLD_HASH=$(cat ./galactic-hash || echo '')
+          if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
+            echo "The ros2-modulo:galactic image did not change."
+            echo "::set-output name=rebuild::false"
+          else
+            echo "ros2-modulo:galactic image has been updated, rebuilding image now..."
+            echo "::set-output name=rebuild::true"
+            echo "::set-output name=id::${NEW_HASH}"
+          fi
+      - name: Check lastest hash on ros2-modulo:galactic image
+        id: check_galactic_devel
+        run: |
+          curl -o ros2-modulo-galactic-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/galactic-devel-hash
+          NEW_HASH=$(cat ./ros2-modulo-galactic-devel-hash || echo '')
+          OLD_HASH=$(cat ./galactic-devel-hash || echo '')
+          if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
+            echo "The ros2-modulo:galactic-devel image did not change."
+            echo "::set-output name=rebuild::false"
+          else
+            echo "ros2-modulo:galactic-devel image has been updated, rebuilding image now..."
+            echo "::set-output name=rebuild::true"
+            echo "::set-output name=id::${NEW_HASH}"
+          fi
+
+  rebuild-latest-image:
+    needs: check-hash
+    runs-on: ubuntu-latest
+    name: Rebuild the latest image
+    if: ${{ needs.check-hash.outputs.latest_rebuild == 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Build new latest image
+        uses: ./.github/actions/build-push
+        with:
+          base_tag: galactic
+          output_tag: latest
+          secret: ${{ secrets.GITHUB_TOKEN }}
+
+  rebuild-devel-image:
+    needs: check-hash
+    runs-on: ubuntu-latest
+    name: Rebuild the devel image
+    if: ${{ needs.check-hash.outputs.devel_rebuild == 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Build new devel image
+        uses: ./.github/actions/build-push
+        with:
+          base_tag: galactic-devel
+          output_tag: devel
+          secret: ${{ secrets.GITHUB_TOKEN }}
+
+  write-hash:
+    needs: [check-hash, rebuild-latest-image, rebuild-devel-image]
+    runs-on: ubuntu-latest
+    name: Write new hashes to file
+    steps:
+      - name: Checkout CI branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.CI_BRANCH }}
+
+      - name: Write new hash to file and push to 'ci' branch
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git fetch && git pull && git rebase origin/master
+          echo ${{ needs.check-hash.outputs.galactic_id }} > ./galactic-hash
+          echo ${{ needs.check-hash.outputs.galactic_devel_id }} > ./galactic-devel-hash
+          git add ./galactic-hash ./galactic-devel-hash
+          git commit -m "Update upstream hashes" && git push -f
