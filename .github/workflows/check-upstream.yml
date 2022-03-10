@@ -39,7 +39,7 @@ jobs:
             echo "::set-output name=rebuild::true"
             echo "::set-output name=id::${NEW_HASH}"
           fi
-      - name: Check lastest hash on ros2-modulo:galactic image
+      - name: Check lastest hash on ros2-modulo:galactic-devel image
         id: check_galactic_devel
         run: |
           curl -o ros2-modulo-galactic-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/galactic-devel-hash
