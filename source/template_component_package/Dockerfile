@@ -1,5 +1,5 @@
-ARG ROS_VERSION=galactic
-FROM component-sdk:${ROS_VERSION} as development
+ARG BASE_TAG=latest
+FROM component-sdk:${BASE_TAG} as development
 WORKDIR ${WORKSPACE}
 
 ARG COMPONENT_PKG=template_component_package
