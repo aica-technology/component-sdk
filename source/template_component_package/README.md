@@ -1,0 +1,1 @@
+# template_component_package
