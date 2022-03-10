@@ -94,6 +94,6 @@ where `template-component-pkg-dev:latest` is the name and tag you desire for you
 
 Using the `aica-docker` utility scripts, you can serve the development image to use it in a configured IDE for remote development:
 ```console
-aica-docker server template-component-pkg-dev:latest -p 7777
+aica-docker server template-component-pkg-dev:latest -u ros2 -p 5550
 ```
 where the `-p <port>` option can be replaced by any port number available.
