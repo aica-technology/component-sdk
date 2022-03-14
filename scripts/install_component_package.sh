@@ -63,6 +63,11 @@ CURRENT_DIR=$(pwd)
 DESTINATION_DIR=""
 COMPONENT_LIST=()
 
+if [[ "$#" -eq 0 ]]; then
+  echo "${HELP_MESSAGE}"
+  exit 0
+fi
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -d|--destination) DESTINATION_DIR="$2"; shift 2;;
