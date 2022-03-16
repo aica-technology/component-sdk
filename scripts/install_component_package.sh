@@ -55,12 +55,16 @@ Options:
   -d, --destination <destination>   If provided, the package(s) will be
                                     moved to the specified directory.
 
+  --force                           Force the component package and its dependencies
+                                    to be reinstalled if it already exists.
+
   -h, --help                        Show this help message.
 "
 
 CURRENT_DIR=$(pwd)
 
-DESTINATION_DIR=""
+DESTINATION_DIR="${CURRENT_DIR}"
+FORCE=0
 COMPONENT_LIST=()
 
 if [[ "$#" -eq 0 ]]; then
@@ -71,6 +75,7 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -d|--destination) DESTINATION_DIR="$2"; shift 2;;
+    --force) FORCE=1; shift 1;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
     *) COMPONENT_LIST+=("$1"); shift 1;;
   esac
@@ -87,8 +92,13 @@ fi
 for COMPONENT in "${COMPONENT_LIST[@]}"; do
   if [ -n "${COMPONENT}" ]; then
     cd "${CURRENT_DIR}" || exit 1
-    echo "Installing dependencies for component ${COMPONENT}"
-
-    install_dependencies "${COMPONENT}" "${DESTINATION_DIR}"
+    if [ "$(ls -A ${DESTINATION_DIR}/${COMPONENT})" ] && [ "${FORCE}" -eq 0 ]; then
+      echo "There already exists a component package named '${COMPONENT}'"
+      echo "in destination '${DESTINATION_DIR}'. Please use the '--force'"
+      echo "option if you wish to reinstall the component package and its dependencies." && exit 0
+    else
+      echo "Installing dependencies for component ${COMPONENT}"
+      install_dependencies "${COMPONENT}" "${DESTINATION_DIR}"
+    fi
   fi
 done
