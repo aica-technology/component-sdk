@@ -41,7 +41,7 @@ function install_dependencies() {
 }
 
 HELP_MESSAGE="
-Usage: ./install_component_package.sh <pkg_names> [-d <destination>]
+Usage: ./install_component_package.sh <pkg_names> -d <destination>
 
 Install a component package or a list of component packages to a certain directory, if
 provided a destination. This script will find and execute any 'install_dependencies.sh'
@@ -52,8 +52,9 @@ Options:
   pkg_names                         Name or list of names of the package(s)
                                     that should be installed.
 
-  -d, --destination <destination>   If provided, the package(s) will be
-                                    moved to the specified directory.
+  -d, --destination <destination>   The package(s) will be moved to the
+                                    specified directory (path can be absolute
+                                    or relative).
 
   --force                           Force the component package and its dependencies
                                     to be reinstalled if it already exists.
@@ -63,7 +64,7 @@ Options:
 
 CURRENT_DIR=$(pwd)
 
-DESTINATION_DIR="${CURRENT_DIR}"
+DESTINATION_DIR=""
 FORCE=0
 COMPONENT_LIST=()
 
@@ -87,6 +88,9 @@ if [ -n "${DESTINATION_DIR}" ]; then
     DESTINATION_DIR="${CURRENT_DIR}/${DESTINATION_DIR}"
   fi
   mkdir -p "${DESTINATION_DIR}"
+else
+  echo "No destination directory for the installation of the component package provided."
+  echo "${HELP_MESSAGE}" && exit 1
 fi
 
 for COMPONENT in "${COMPONENT_LIST[@]}"; do
