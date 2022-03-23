@@ -94,9 +94,10 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
 
   write-hashes:
-    needs: [check-hash, rebuild-latest-image, rebuild-devel-image]
+    needs: check-hash
     runs-on: ubuntu-latest
     name: Create new ci branch from main and write hashes
+    if: needs.check-hash.outputs.latest_rebuild == 'true' || needs.check-hash.outputs.devel_rebuild == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
