@@ -1,6 +1,6 @@
 name: Build and push 'latest' image
 
-# Run workflow on pushes to develop branch
+# Run workflow on push to develop branch
 on:
   push:
     branches:
