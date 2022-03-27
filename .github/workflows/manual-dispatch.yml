@@ -1,0 +1,29 @@
+name: Manual Build and Push
+
+# Run workflow by manual dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      base_tag:
+        description: 'The tag of the base image to use'
+        required: true
+        default: ''
+      output_tag:
+        description: 'The tag for the output image'
+        required: true
+        default: ''
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    name: Build and publish image
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Push
+        uses: ./.github/actions/build-push
+        with:
+          base_tag: ${{ github.event.inputs.base_tag }}
+          output_tag: ${{ github.event.inputs.output_tag }}
+          secret: ${{ secrets.GITHUB_TOKEN }}
