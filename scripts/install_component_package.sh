@@ -36,19 +36,19 @@ function install_dependencies() {
     # eventually move the folder to the destination
     if [ -n "${DESTINATION_DIR}" ]; then
       echo "Moving component from ${COMPONENT_DIR} to ${DESTINATION_DIR}"
-      cp -r "${COMPONENT_DIR}" "${DESTINATION_DIR}"
+      cp -rn "${COMPONENT_DIR}" "${DESTINATION_DIR}"
     fi
 }
 
 HELP_MESSAGE="
-Usage: ./install_component_package.sh <pkg_names> -d <destination>
+Usage: ./install_component_package.sh <pkg_names> -d <destination> [--force]
 
 Install a component package or a list of component packages to a certain directory, if
 provided a destination. This script will find and execute any 'install_dependencies.sh'
 scripts that contain the commands to install system dependencies as well as find and
 install any python packages provided in 'requirements.txt' files.
 
-Options:
+Parameters:
   pkg_names                         Name or list of names of the package(s)
                                     that should be installed.
 
@@ -56,6 +56,7 @@ Options:
                                     specified directory (path can be absolute
                                     or relative).
 
+Options:
   --force                           Force the component package and its dependencies
                                     to be reinstalled if it already exists.
 
