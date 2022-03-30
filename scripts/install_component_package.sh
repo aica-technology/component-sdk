@@ -38,6 +38,7 @@ function install_dependencies() {
       echo "Moving component from ${COMPONENT_DIR} to ${DESTINATION_DIR}"
       cp -rn "${COMPONENT_DIR}" "${DESTINATION_DIR}"
     fi
+    echo "Installation of component $1 complete"
 }
 
 HELP_MESSAGE="
