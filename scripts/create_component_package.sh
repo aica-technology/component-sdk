@@ -3,8 +3,8 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 COMPONENT_PKG_NAME=""
-TEMPLATE_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}")
-COMPONENT_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}")
+TEMPLATE_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}"/../source)
+COMPONENT_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}"/../source)
 
 HELP_MESSAGE="Usage: ./create_component_package.sh pkg_name [--template-dir <template_pgk_dir>] [-d <destination>]
 

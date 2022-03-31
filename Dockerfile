@@ -20,10 +20,6 @@ RUN echo "source ${WORKSPACE}/install/setup.bash" | cat - ${HOME}/.bashrc > tmp 
 
 WORKDIR ${HOME}
 
-# copy the template component package and the create_component_package script
-COPY --chown=${USER} ./source/template_component_package ${HOME}/component-sdk/template_component_package
-COPY --chown=${USER} ./scripts/create_component_package.sh ${HOME}/component-sdk
-
 # install the install_component_package script to bin
 USER root
 COPY ./scripts/install_component_package.sh /bin/install_component_package
