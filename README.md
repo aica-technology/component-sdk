@@ -11,6 +11,15 @@ For example, to create the `foo` component package:
 This will copy the template package [template_component_package](./source/template_component_package) in the [source](./source) folder, and
 rename all the occurrences of `template_component_package` to `foo`.
 
+It's also possible to copy the template package to a different location, by providing a *destination* option:
+```console
+./scrips/create_component_package.sh foo --destination /path/to/location
+```
+or just
+```console
+./scrips/create_component_package.sh foo -d /path/to/location
+```
+
 Components can be implemented in C++ or Python. A component package can contain multiple components in either language.
 The following sections describe the steps required to implement a new components in the component package.
 
