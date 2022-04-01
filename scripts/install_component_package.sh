@@ -98,7 +98,7 @@ fi
 for COMPONENT in "${COMPONENT_LIST[@]}"; do
   if [ -n "${COMPONENT}" ]; then
     cd "${CURRENT_DIR}" || exit 1
-    if [ "$(ls -A ${DESTINATION_DIR}/${COMPONENT})" ] && [ "${FORCE}" -eq 0 ]; then
+    if [ -d "${DESTINATION_DIR}"/"${COMPONENT}" ] && [ "${FORCE}" -eq 0 ]; then
       echo "There already exists a component package named '${COMPONENT}'"
       echo "in destination '${DESTINATION_DIR}'. Please use the '--force'"
       echo "option if you wish to reinstall the component package and its dependencies." && exit 0

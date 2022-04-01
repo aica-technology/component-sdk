@@ -21,6 +21,4 @@ RUN echo "source ${WORKSPACE}/install/setup.bash" | cat - ${HOME}/.bashrc > tmp 
 WORKDIR ${HOME}
 
 # install the install_component_package script to bin
-USER root
 COPY ./scripts/install_component_package.sh /bin/install_component_package
-USER ${USER}
