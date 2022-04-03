@@ -1,0 +1,110 @@
+{
+  "name": "Foo",
+  "description": {
+    "brief": "An example component",
+    "details": "A longer description of the example component"
+  },
+  "registration": {
+    "package": "foo_package",
+    "class": "foo_package::Foo"
+  },
+  "is_lifecycle": false,
+  "inputs": [
+    {
+      "display_name": "Input 1",
+      "description": "An example input",
+      "signal_type": "bool",
+      "signal_topic": "~/foo_in"
+    }
+  ],
+  "input_collections": [
+    {
+      "display_name": "Input Collection 1",
+      "description": "An example dynamic input collection",
+      "signal_type": "int",
+      "topic_array_parameter": "foo_dynamic_in_1_topic_names"
+    },
+    {
+      "display_name": "Input Collection 2",
+      "description": "Another example dynamic input collection with default initial inputs",
+      "signal_type": "string",
+      "topic_array_parameter": "foo_dynamic_in_2_topic_names",
+      "signal_topic_array": [
+        "~/default_in_x",
+        "~/default_in_y",
+        "~/default_in_z"
+      ]
+    },
+    {
+      "display_name": "Input Collection 3",
+      "description": "Another example dynamic input collection with configurable type",
+      "signal_type": "joint_positions",
+      "topic_array_parameter": "foo_dynamic_in_3_topic_names",
+      "configurable_type": true,
+      "type_parameter": "foo_dynamic_in_3_type",
+      "supported_types": ["joint_positions", "joint_state"]
+    }
+  ],
+  "outputs": [
+    {
+      "display_name": "Output 1",
+      "description": "An example output",
+      "signal_type": "cartesian_pose",
+      "signal_topic": "~/foo_out_1",
+      "configurable_topic": true,
+      "topic_parameter": "foo_out_1_topic_name"
+    },
+    {
+      "display_name": "Output 2",
+      "description": "Another example output",
+      "signal_type": "cartesian_state",
+      "signal_topic": "~/foo_out_2",
+      "configurable_type": true,
+      "type_parameter": "foo_out_2_type",
+      "supported_types": ["cartesian_pose", "cartesian_twist", "cartesian_state"]
+    }
+  ],
+  "parameters": [
+    {
+      "display_name": "Parameter X",
+      "description": "An example parameter",
+      "parameter_name": "parameter_x",
+      "parameter_type": "int"
+    },
+    {
+      "display_name": "Parameter Y",
+      "description": "An example optional parameter",
+      "parameter_name": "parameter_y",
+      "parameter_type": "string",
+      "default_value": "some_default_value",
+      "optional": true
+    },
+    {
+      "display_name": "Parameter Z",
+      "description": "An example parameter that can be dynamically reconfigured while the component is active",
+      "parameter_name": "parameter_z",
+      "parameter_type": "double_array",
+      "dynamic": true
+    }
+  ],
+  "predicates": [
+    {
+      "display_name": "Predicate Alpha",
+      "description": "An example predicate",
+      "predicate_name": "is_alpha"
+    }
+  ],
+  "services": [
+    {
+      "display_name": "Trigger Service",
+      "description": "An example service",
+      "service_name": "trigger_something"
+    },
+    {
+      "display_name": "Payload Service",
+      "description": "An example service with a payload",
+      "service_name": "trigger_something_with_parameters",
+      "has_payload": true
+    }
+  ]
+}
