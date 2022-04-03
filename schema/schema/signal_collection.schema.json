@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "https://github.com/aica-technology/dynamic-components/schema/schema/input_signal_collection.schema.json",
+  "title": "Input Signal Collection",
+  "description": "A dynamic collection of input signals that can have zero or more topics of the same type.",
+  "type": "object",
+  "properties": {
+    "display_name": {
+      "description": "The short name of this input signal collection (to be displayed on the edge of the component).",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of the signal collection for tool-tips and documentation.",
+      "type": "string"
+    },
+    "signal_type": {
+      "description": "The default type of the signals (signals in a collection must have the same type).",
+      "$ref": "signal_type.schema.json"
+    },
+    "signal_topic_array": {
+      "description": "The optional default array of topic names in this signal collection.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "topic_array_parameter": {
+      "description": "The name of the hidden component parameter that is used to set the array of signal topic names.",
+      "type": "string"
+    },
+    "configurable_type": {
+      "description": "Indicate if the signal collection type is configurable and can be changed.",
+      "type": "boolean"
+    },
+    "supported_types": {
+      "description": "An array of signal types supported by configurable typing.",
+      "type": "array",
+      "items": {
+        "$ref": "signal_type.schema.json"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "type_parameter": {
+      "description": "The name of the hidden component parameter that is used to set the signal collection type.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "display_name",
+    "description",
+    "signal_type",
+    "topic_array_parameter"
+  ],
+  "dependentSchemas": {
+    "configurable_type": {
+      "if": {
+        "properties": {
+          "configurable_type": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "supported_types",
+          "type_parameter"
+        ]
+      }
+    }
+  }
+}

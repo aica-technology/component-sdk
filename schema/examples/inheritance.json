@@ -1,0 +1,44 @@
+{
+  "name": "C",
+  "description": {
+    "brief": "An example derived component",
+    "details": "This component derives from component B"
+  },
+  "registration": {
+    "package": "example_package",
+    "class": "example_package::C"
+  },
+  "is_lifecycle": true,
+  "inherits": {
+    "name": "B",
+    "description": {
+      "brief": "An example intermediate component",
+      "details": "This is an intermediate component that derives from component A"
+    },
+    "registration": {
+      "package": "example_package",
+      "class": "example_package::B"
+    },
+    "is_lifecycle": true,
+    "inherits": {
+      "package": "example_package",
+      "class": "example_package::A"
+    },
+    "parameters": [
+      {
+        "display_name": "Base parameter",
+        "description": "An example parameter in component B",
+        "parameter_name": "parameter_b",
+        "parameter_type": "int"
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "display_name": "Derived parameter",
+      "description": "An example parameter in component C",
+      "parameter_name": "parameter_c",
+      "parameter_type": "int"
+    }
+  ]
+}
