@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "https://github.com/aica-technology/dynamic-components/schema/schema/signal.schema.json",
+  "title": "Component Signal",
+  "description": "A signal associated with a dynamic component that can be an input or an output.",
+  "type": "object",
+  "properties": {
+    "display_name": {
+      "description": "The short name of this signal (to be displayed on the edge of the component).",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of the signal for tool-tips and documentation.",
+      "type": "string"
+    },
+    "signal_type": {
+      "description": "The default type of this signal (connected inputs and outputs must have compatible types).",
+      "$ref": "signal_type.schema.json"
+    },
+    "signal_topic": {
+      "description": "The default topic name assigned to this signal.",
+      "type": "string"
+    },
+    "configurable_topic": {
+      "description": "Indicate if the signal topic is configurable and can be renamed.",
+      "type": "boolean"
+    },
+    "topic_parameter": {
+      "description": "The name of the hidden component parameter that is used to set the signal topic name.",
+      "type": "string"
+    },
+    "configurable_type": {
+      "description": "Indicate if the signal type is configurable and can be changed.",
+      "type": "boolean"
+    },
+    "supported_types": {
+      "description": "An array of signal types supported by configurable typing.",
+      "type": "array",
+      "items": {
+        "$ref": "signal_type.schema.json"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "type_parameter": {
+      "description": "The name of the hidden component parameter that is used to set the signal topic type.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "display_name",
+    "description",
+    "signal_type",
+    "signal_topic"
+  ],
+  "dependentSchemas": {
+    "configurable_topic": {
+      "if": {
+        "properties": {
+          "configurable_topic": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "topic_parameter"
+        ]
+      }
+    },
+    "configurable_type": {
+      "if": {
+        "properties": {
+          "configurable_type": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "supported_types",
+          "type_parameter"
+        ]
+      }
+    }
+  }
+}

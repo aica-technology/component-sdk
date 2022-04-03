@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "https://github.com/aica-technology/dynamic-components/schema/schema/parameter.schema.json",
+  "title": "Component Parameter",
+  "description": "A dynamic component parameter that is publicly configurable.",
+  "type": "object",
+  "properties": {
+    "display_name": {
+      "description": "The human-readable parameter name.",
+      "type": "string"
+    },
+    "description": {
+      "description": "A brief description of the parameter.",
+      "type": "string"
+    },
+    "parameter_name": {
+      "description": "The lower_snake_case parameter name as it is declared in the component.",
+      "type": "string"
+    },
+    "parameter_type": {
+      "description": "The parameter value type.",
+      "$ref": "parameter_type.schema.json"
+    },
+    "encoded_state_type": {
+      "description": "The state type of the parameter, if the value type is an encoded state.",
+      "$ref": "encoded_state_type.schema.json"
+    },
+    "default_value": {
+      "description": "The string representation of the default parameter value.",
+      "type": "string"
+    },
+    "optional": {
+      "description": "Specify if this parameter is optional.",
+      "type": "boolean"
+    },
+    "dynamic": {
+      "description": "Specify if this parameter can be dynamically reconfigured while the component is active",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "display_name",
+    "description",
+    "parameter_name",
+    "parameter_type"
+  ],
+  "if": {
+    "properties": {
+      "parameter_type": {
+        "const": "json_encoded_state"
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "encoded_state_type"
+    ]
+  },
+  "dependentSchemas": {
+    "optional": {
+      "if": {
+        "properties": {
+          "optional": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "default_value"
+        ]
+      }
+    }
+  }
+}
