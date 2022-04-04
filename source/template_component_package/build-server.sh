@@ -19,6 +19,7 @@ Options:
   -v, --verbose          Use the verbose option during the building
                          process.
   -s, --serve            Start the remove development server.
+  -h, --help             Show this help message.
 "
 
 BUILD_FLAGS=()

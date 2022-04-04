@@ -88,21 +88,23 @@ The component build system handles the installation of external dependencies by 
 External system dependencies can be installed by adding the installation steps in the [install_dependencies.sh](./source/template_component_package/install_dependencies.sh) script in the created component package.
 
 ### Python packages
-Python packages can be installed by adding a `requirements.txt` file in the create component package.
+Python packages can be installed by adding a `requirements.txt` file in the created component package.
 It should contain all the needed python modules, eventually tagged by desired version.
 
 ## Building a development image
 The created component package contains a [Dockerfile](./source/template_component_package/Dockerfile) that installs the component package on top of a development image.
 This installs all the needed dependencies and allows to build and test components from an IDE connected in ssh.
 
-To build the development image for the `template_component_package` you would run:
+To build the development image one can run the provided [build-server](./source/template_component_package/build-server.sh) script:
 ```console
-cd source/template_component_package && DOCKER_BUILDKIT=1 docker build . -t template-component-pkg-dev:latest
+cd source/template_component_package && ./build-server.sh
 ```
-where `template-component-pkg-dev:latest` is the name and tag you desire for your local image.
+By providing appropriate command line arguments to this script, different stages of the build process can be targeted,
+unittests can be run automatically, and a development server to use it in a configured IDE for remote development can
+be started automatically. For more details, please refer to the script directly, or execute the script with the `--help` option.
 
-Using the `aica-docker` utility scripts, you can serve the development image to use it in a configured IDE for remote development:
+Using the `aica-docker` utility scripts, you can also serve the development image manually:
 ```console
-aica-docker server template-component-pkg-dev:latest -u ros2 -p 5550
+aica-docker server template-component-pkg:latest -u ros2 -p 6666
 ```
 where the `-p <port>` option can be replaced by any port number available.
