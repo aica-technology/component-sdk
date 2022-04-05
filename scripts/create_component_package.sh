@@ -83,6 +83,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/python_tests/test_py_component.py
 
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/Dockerfile
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/build-server.sh
 else
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/README.md
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/setup.cfg
@@ -97,6 +98,7 @@ else
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/python_tests/test_py_component.py
 
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/Dockerfile
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/build-server.sh
 fi
 
 echo "Component ${COMPONENT_PKG_NAME} created in ${COMPONENT_DIR}."
