@@ -29,12 +29,12 @@ TARGET=production
 while [[ $# -gt 0 ]]; do
   opt="$1"
   case $opt in
-    -d|--development) TARGET=development; IMAGE_TAG=development ; shift 1 ;;
-    --test) TARGET=test-sources ; IS_TESTING=true ; shift 1 ;;
-    -r|--rebuild) BUILD_FLAGS+=(--no-cache) ; shift 1 ;;
-    -v|--verbose) BUILD_FLAGS+=(--progress=plain) ; shift 1 ;;
-    -s|--serve) SERVE_REMOTE=true ; shift ;;
-    -h|--help) echo "${HELP_MESSAGE}" ; exit 0 ;;
+    -d|--development) TARGET=development; IMAGE_TAG=development; shift 1;;
+    --test) TARGET=test-sources; IS_TESTING=true; shift 1;;
+    -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift 1;;
+    -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift 1;;
+    -s|--serve) SERVE_REMOTE=true; shift;;
+    -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
     *) echo "Error in command line parsing" >&2
        echo -e "\n${HELP_MESSAGE}"
        exit 1
