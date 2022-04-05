@@ -42,7 +42,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # test incompatibility between test and development
-if [[ ${IS_TESTING} = true && ${IMAGE_TAG} == "development" ]]; then
+if [[ ${IS_TESTING} = true && ${IMAGE_TAG} = "development" ]]; then
   echo "Error in command line arguments:"
   echo "--development and --test options are not compatible."
   exit 1
