@@ -1,14 +1,14 @@
 ARG BASE_TAG=latest
-FROM component-sdk:${BASE_TAG} as development
-WORKDIR ${WORKSPACE}
+FROM ghcr.io/aica-technology/component-sdk:${BASE_TAG} as development
+WORKDIR /tmp
 
 ARG COMPONENT_PKG=template_component_package
 # copy the script folder
-COPY --chown=${USER} ./ ${WORKSPACE}/src/${COMPONENT_PKG}
+COPY --chown=${USER} ./ ./${COMPONENT_PKG}
 
 # install the source folder and their dependencies
 USER root
-RUN --mount=type=ssh ${HOME}/scripts/install_component_package.sh ${COMPONENT_PKG}
+RUN --mount=type=ssh install_component_package ${COMPONENT_PKG} --destination ${WORKSPACE}/src
 RUN chown -R ${USER}:${USER} ${WORKSPACE}/src
 USER ${USER}
 
@@ -19,21 +19,14 @@ RUN sudo apt-get update \
   && sudo rm -rf /var/lib/apt/lists/* \
   && sudo rm -rf /tmp/*
 
+WORKDIR ${WORKSPACE}
+
 
 FROM development as production
-WORKDIR ${WORKSPACE}
 # install all dependencies and build the component workspace
 RUN /bin/bash -c "source ${WORKSPACE}/install/setup.bash; colcon build --symlink-install"
 
 
 FROM production as test-sources
-WORKDIR ${WORKSPACE}
-
+# run the unit tests of the built workspace
 RUN /bin/bash -c "source ${WORKSPACE}/install/setup.bash; colcon test --return-code-on-test-failure"
-
-
-FROM development as runtime
-WORKDIR ${WORKSPACE}
-
-# Clean image
-RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*

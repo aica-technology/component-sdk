@@ -1,5 +1,5 @@
-ARG ROS_VERSION=galactic
-FROM ghcr.io/aica-technology/ros2-modulo:${ROS_VERSION} as workspace
+ARG BASE_TAG=galactic
+FROM ghcr.io/aica-technology/ros2-modulo:${BASE_TAG} as workspace
 
 # set default shell
 SHELL ["/bin/bash", "-c"]
