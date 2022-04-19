@@ -9,7 +9,7 @@ JSON_FILE="$1"
 FULL_PATH="$(cd "$(dirname "$1")" || exit 1; pwd)"
 FILENAME=$(basename "${JSON_FILE}")
 
-IMAGE_NAME=aica-technology/dynamic-components/schema:validate
+IMAGE_NAME=aica-technology/component-sdk/schema:validate
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 docker build --target validate --tag "${IMAGE_NAME}" "${SCRIPT_DIR}"

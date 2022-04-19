@@ -5,8 +5,8 @@ if [ "$#" -ne 0 ]; then
     exit 0
 fi
 
-IMAGE_NAME=aica-technology/dynamic-components/schema:html
-CONTAINER_NAME=aica-technology-dynamic-components-schema-html
+IMAGE_NAME=aica-technology/component-sdk/schema:html
+CONTAINER_NAME=aica-technology-component-sdk-schema-html
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 docker build --target serve-html --tag "${IMAGE_NAME}" "${SCRIPT_DIR}"
