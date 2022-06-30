@@ -13,6 +13,11 @@ protected:
     manager_ = std::make_shared<rclcpp_components::ComponentManager>(exec_);
     exec_->add_node(manager_);
   }
+
+  void TearDown() override {
+    rclcpp::shutdown();
+  }
+
   std::shared_ptr<rclcpp::executors::SingleThreadedExecutor> exec_;
   std::shared_ptr<rclcpp_components::ComponentManager> manager_;
 };
@@ -32,3 +37,5 @@ TEST_F(TestCPPComponent, test_component_load) {
   }
   EXPECT_TRUE(component_exists);
 }
+
+// Add more test fixtures to validate the component behavior
