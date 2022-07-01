@@ -17,6 +17,7 @@
 
   <depend>component_interfaces</depend>
   <depend>modulo_core</depend>
+  <depend>modulo_components</depend>
 
   <exec_depend>launch_ros</exec_depend>
 
