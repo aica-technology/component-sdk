@@ -13,6 +13,10 @@ class PyLifecycleComponent(LifecycleComponent):
         # activation steps before running
         return True
 
+    def on_deactivate_callback(self) -> bool:
+        # deactivation steps
+        return True
+
     def on_step_callback(self):
         # do something periodically
         pass
