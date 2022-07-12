@@ -1,4 +1,4 @@
-#include "template_component_package/CPPComponent.h"
+#include "template_component_package/CPPComponent.hpp"
 
 namespace template_component_package {
 CPPComponent::CPPComponent(const rclcpp::NodeOptions& options) :

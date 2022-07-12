@@ -1,4 +1,4 @@
-#include "template_component_package/CPPLifecycleComponent.h"
+#include "template_component_package/CPPLifecycleComponent.hpp"
 
 namespace template_component_package {
 CPPLifecycleComponent::CPPLifecycleComponent(const rclcpp::NodeOptions& options) :
