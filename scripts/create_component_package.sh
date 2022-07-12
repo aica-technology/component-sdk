@@ -1,12 +1,13 @@
 #!/bin/bash
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SDK_DIR=$(dirname "${SCRIPT_DIR}")
+TEMPLATE_DIR="${SDK_DIR}"/source/template_component_package
+DESTINATION_DIR="${SDK_DIR}"/source
 
 COMPONENT_PKG_NAME=""
-TEMPLATE_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}"/../source)
-COMPONENT_PARENT_DIR=$(readlink -m "${SCRIPT_DIR}"/../source)
 
-HELP_MESSAGE="Usage: ./create_component_package.sh pkg_name [--template-dir <template_pgk_dir>] [-d <destination>]
+HELP_MESSAGE="Usage: ./create_component_package.sh pkg_name [-d <destination>] [--template-dir <template_pkg_dir>]
 
 Create a component package with a desired name from a template package.
 
@@ -16,11 +17,11 @@ Parameters:
                                       name the component package.
 
 Options:
-  --template-dir <template_pgk_dir>   Location of the template component package
-                                      (default: ${TEMPLATE_PARENT_DIR}).
+  -d|--destination                    Desired location of the created component package.
+                                      Default: ${DESTINATION_DIR}
 
-  -d|--destination                    Desired location of the created component package
-                                      (default: ${COMPONENT_PARENT_DIR}).
+  --template-dir <template_pgk_dir>   Location of the template component package.
+                                      Default: ${TEMPLATE_DIR}
 
   -h|--help                           Show this help message.
 "
@@ -32,10 +33,10 @@ fi
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --template-dir) TEMPLATE_PARENT_DIR="$2"; shift 2;;
-    -d|--destination) COMPONENT_PARENT_DIR="$2"; shift 2;;
+    --template-dir) TEMPLATE_DIR="$2"; shift 2;;
+    -d|--destination) DESTINATION_DIR="$2"; shift 2;;
     -h|--help) echo -e "\n${HELP_MESSAGE}"; exit 0;;
-    *) if [ -z "${COMPONENT_PKG_NAME}" ];then
+    *) if [ -z "${COMPONENT_PKG_NAME}" ]; then
          COMPONENT_PKG_NAME="$1"
        else
          echo "Only provide one package name"
@@ -45,60 +46,71 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-COMPONENT_DIR="${COMPONENT_PARENT_DIR}/${COMPONENT_PKG_NAME}"
-
-if [[ "${COMPONENT_PKG_NAME}" == "test" ]]; then
+if [ -z "${COMPONENT_PKG_NAME}" ]; then
+  echo "A component package name must be provided"
+  echo -e "\n${HELP_MESSAGE}"
+  exit 1
+elif [[ "${COMPONENT_PKG_NAME}" == "test" ]]; then
   echo "Package name 'test' is reserved. Please consider another name for your component package."
   echo -e "\n${HELP_MESSAGE}"
   exit 1
 fi
 
+COMPONENT_PKG_DIR="${DESTINATION_DIR}/${COMPONENT_PKG_NAME}"
+
 # check if the component already exists
-if [[ -d "${COMPONENT_DIR}" ]]; then
-  echo "Component ${COMPONENT_PKG_NAME} already exists in ${COMPONENT_DIR}"
+if [[ -d "${COMPONENT_PKG_DIR}" ]]; then
+  echo "Directory ${COMPONENT_PKG_DIR} already exists!"
   echo -e "\n${HELP_MESSAGE}"
   exit 1
 fi
 
-# copy template_component_package into the component type directory
-mkdir -p "${COMPONENT_PARENT_DIR}"
-cp -r "${TEMPLATE_PARENT_DIR}"/template_component_package "${COMPONENT_DIR}"
+# copy template_component_package into the destination directory
+mkdir -p "${DESTINATION_DIR}"
+cp -r "${TEMPLATE_DIR}" "${COMPONENT_PKG_DIR}"
 
 # rename all the template_component_package directories
-mv "${COMPONENT_DIR}"/template_component_package "${COMPONENT_DIR}"/"${COMPONENT_PKG_NAME}"
-mv "${COMPONENT_DIR}"/include/template_component_package "${COMPONENT_DIR}"/include/"${COMPONENT_PKG_NAME}"
+mv "${COMPONENT_PKG_DIR}"/template_component_package "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"
+mv "${COMPONENT_PKG_DIR}"/include/template_component_package "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"
 
 # sed template_component_package in files
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/README.md
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/setup.cfg
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/package.xml
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/CMakeLists.txt
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/README.md
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/setup.cfg
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/package.xml
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/CMakeLists.txt
 
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.h
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/src/CPPComponent.cpp
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/cpp_tests/test_cpp_component.cpp
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.h
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPComponent.cpp
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_component.cpp
 
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/"${COMPONENT_PKG_NAME}"/py_component.py
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/python_tests/test_py_component.py
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPLifecycleComponent.h
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPLifecycleComponent.cpp
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_lifecycle_component.cpp
 
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/Dockerfile
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/build-server.sh
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_component.py
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_component.py
+
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_lifecycle_component.py
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_lifecycle_component.py
+
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/Dockerfile
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/build-server.sh
 else
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/README.md
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/setup.cfg
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/package.xml
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/CMakeLists.txt
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/README.md
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/setup.cfg
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/package.xml
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/CMakeLists.txt
 
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.h
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/src/CPPComponent.cpp
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/cpp_tests/test_cpp_component.cpp
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.h
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPComponent.cpp
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_component.cpp
 
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/"${COMPONENT_PKG_NAME}"/py_component.py
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/test/python_tests/test_py_component.py
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_component.py
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_component.py
 
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/Dockerfile
-  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_DIR}"/build-server.sh
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/Dockerfile
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/build-server.sh
 fi
 
-echo "Component ${COMPONENT_PKG_NAME} created in ${COMPONENT_DIR}."
+echo "Component ${COMPONENT_PKG_NAME} created in ${DESTINATION_DIR}."

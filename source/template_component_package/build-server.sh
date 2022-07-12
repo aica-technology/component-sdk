@@ -1,7 +1,8 @@
 #!/bin/bash
 BASE_IMAGE_TAG=latest
 
-IMAGE_NAME=template_component_package
+PKG_NAME=template_component_package
+IMAGE_NAME="${PKG_NAME//[_]/-}"
 IMAGE_TAG=latest
 
 SERVE_REMOTE=false
@@ -50,7 +51,7 @@ fi
 
 BUILD_FLAGS+=(--target "${TARGET}")
 BUILD_FLAGS+=(--build-arg BASE_TAG="${BASE_IMAGE_TAG}")
-BUILD_FLAGS+=(-t "${IMAGE_NAME//[_]/-}:${IMAGE_TAG}")
+BUILD_FLAGS+=(-t "${IMAGE_NAME}:${IMAGE_TAG}")
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
   BUILD_FLAGS+=(--ssh default="${SSH_AUTH_SOCK}")

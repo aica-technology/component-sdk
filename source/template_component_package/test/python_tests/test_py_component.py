@@ -1,11 +1,11 @@
 import pytest
 
-from template_component_package.py_component import PYComponent
+from template_component_package.py_component import PyComponent
 
 
 @pytest.fixture()
 def py_component(ros_context):
-    yield PYComponent('py_component')
+    yield PyComponent('py_component')
 
 
 def test_construction(py_component):
