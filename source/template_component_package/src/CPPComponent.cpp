@@ -6,20 +6,8 @@ CPPComponent::CPPComponent(const rclcpp::NodeOptions& options) :
   // add parameters, inputs and outputs here
 }
 
-bool CPPComponent::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
-  if (parameter->get_name() == "foo") {
-    // validate the incoming parameter value according to some criteria
-    auto value = parameter->get_parameter_value<double>();
-    if (value < 0.0) {
-      // if the parameter is invalid, return false to ignore the new value
-      return false;
-    }
-    if (value > 1.0) {
-      // if necessary, modify the incoming parameter value during validation
-      parameter->set_parameter_value<double>(1.0);
-    }
-  }
-  // return true if the new parameter value should be applied
+bool CPPComponent::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
+  // validate an incoming parameter value according to some criteria
   return true;
 }
 

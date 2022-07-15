@@ -8,15 +8,7 @@ class PyComponent(Component):
         # add parameters, inputs and outputs here
 
     def _validate_parameter(self, parameter: sr.Parameter) -> bool:
-        if parameter.get_name() == "foo":
-            # validate the incoming parameter value according to some criteria
-            if sr.Parameter.get_value() < 0.0:
-                # if the parameter is invalid, return False to ignore the new value
-                return False
-            if sr.Parameter.get_value() > 1.0:
-                # if necessary, modify the incoming parameter value during validation
-                sr.Parameter.set_value(1.0)
-        # return True if the new parameter value should be applied
+        # validate an incoming parameter value according to some criteria
         return True
 
     def on_execute_callback(self) -> bool:
