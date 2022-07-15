@@ -1,1 +1,1 @@
-# install here any system dependencies using sudo apt get commands
+# install any system dependencies using sudo apt get commands
