@@ -80,11 +80,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/package.xml
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/CMakeLists.txt
 
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.h
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPComponent.hpp
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPComponent.cpp
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_component.cpp
 
-  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPLifecycleComponent.h
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPLifecycleComponent.hpp
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPLifecycleComponent.cpp
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_lifecycle_component.cpp
 
