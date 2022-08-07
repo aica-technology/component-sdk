@@ -13,28 +13,29 @@
       "description": "A description of the signal collection for tool-tips and documentation.",
       "type": "string"
     },
-    "signal_type": {
-      "description": "The default type of the signals (signals in a collection must have the same type).",
-      "$ref": "signal_type.schema.json"
+    "input_collection_name": {
+      "description": "The registered name of the input collection from which the parameter '<$input_collection_name>_topics' is determined.",
+      "type": "string"
     },
-    "signal_topic_array": {
-      "description": "The optional default array of topic names in this signal collection.",
+    "default_topics": {
+      "description": "The optional default array of topic names in this signal collection. Setting the parameter '<$input_collection_name>_topics' will override the default value.",
       "type": "array",
       "items": {
         "type": "string"
       },
       "uniqueItems": true
     },
-    "topic_array_parameter": {
-      "description": "The name of the hidden component parameter that is used to set the array of signal topic names.",
-      "type": "string"
-    },
-    "configurable_type": {
-      "description": "Indicate if the signal collection type is configurable and can be changed.",
+    "reconfigurable_topics": {
+      "description": "Indicate if the array of input collection topics is reconfigurable and can be changed while the component is inactive through the '<$input_collection_name>_topics' parameter.",
+      "default": false,
       "type": "boolean"
     },
-    "supported_types": {
-      "description": "An array of signal types supported by configurable typing.",
+    "signal_type": {
+      "description": "The default type of the signals (signals in a collection must have the same type).",
+      "$ref": "signal_type.schema.json"
+    },
+    "signal_types": {
+      "description": "An array of signal types supported by configurable typing. The active type is set through the '<$input_collection_name>_type' parameter.",
       "type": "array",
       "items": {
         "$ref": "signal_type.schema.json"
@@ -42,32 +43,31 @@
       "minItems": 1,
       "uniqueItems": true
     },
-    "type_parameter": {
-      "description": "The name of the hidden component parameter that is used to set the signal collection type.",
-      "type": "string"
+    "default_type": {
+      "description": "The default type of this signal. It must be in the list of signal types.",
+      "$ref": "signal_type.schema.json"
+    },
+    "reconfigurable_type": {
+      "description": "Indicate if the signal type is reconfigurable and can be changed while the component is inactive through the '<$input_collection_name>_type' parameter.",
+      "default": false,
+      "type": "boolean"
     }
   },
   "required": [
     "display_name",
     "description",
-    "signal_type",
-    "topic_array_parameter"
+    "input_collection_name"
   ],
-  "dependentSchemas": {
-    "configurable_type": {
-      "if": {
-        "properties": {
-          "configurable_type": {
-            "const": true
-          }
-        }
-      },
-      "then": {
-        "required": [
-          "supported_types",
-          "type_parameter"
-        ]
-      }
+  "oneOf": [
+    {
+      "required": [
+        "signal_type"
+      ]
+    },
+    {
+      "required": [
+        "supported_types"
+      ]
     }
-  }
+  ]
 }
