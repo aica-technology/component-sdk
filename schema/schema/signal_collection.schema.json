@@ -66,7 +66,8 @@
     },
     {
       "required": [
-        "supported_types"
+        "signal_types",
+        "default_type"
       ]
     }
   ]

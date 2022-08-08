@@ -40,7 +40,7 @@
         "[ 1.0, 2.0, 3.0 ]",
         null
       ],
-      "oneOf": [
+      "anyOf": [
         {"type": "string"},
         {"type": null}
       ]
