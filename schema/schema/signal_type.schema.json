@@ -10,6 +10,7 @@
         "bool",
         "int",
         "double",
+        "double_array",
         "string"
       ]
     },

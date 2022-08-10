@@ -7,6 +7,10 @@
   "properties": {
     "display_name": {
       "description": "The human-readable parameter name.",
+      "examples": [
+        "Reference Frame",
+        "Gain"
+      ],
       "type": "string"
     },
     "description": {
@@ -15,23 +19,31 @@
     },
     "parameter_name": {
       "description": "The lower_snake_case parameter name as it is declared in the component.",
+      "examples": [
+        "reference_frame",
+        "gain"
+      ],
       "type": "string"
     },
     "parameter_type": {
       "description": "The parameter value type.",
       "$ref": "parameter_type.schema.json"
     },
-    "encoded_state_type": {
+    "parameter_state_type": {
       "description": "The state type of the parameter, if the value type is an encoded state.",
       "$ref": "encoded_state_type.schema.json"
     },
     "default_value": {
-      "description": "The string representation of the default parameter value.",
-      "type": "string"
-    },
-    "optional": {
-      "description": "Specify if this parameter is optional.",
-      "type": "boolean"
+      "description": "The string representation of the default parameter value, or null if the parameter has no valid default value.",
+      "examples": [
+        "foo",
+        "[ 1.0, 2.0, 3.0 ]",
+        null
+      ],
+      "anyOf": [
+        {"type": "string"},
+        {"type": null}
+      ]
     },
     "dynamic": {
       "description": "Specify if this parameter can be dynamically reconfigured while the component is active",
@@ -42,34 +54,23 @@
     "display_name",
     "description",
     "parameter_name",
-    "parameter_type"
+    "parameter_type",
+    "default_value"
   ],
-  "if": {
-    "properties": {
-      "parameter_type": {
-        "const": "json_encoded_state"
-      }
-    }
-  },
-  "then": {
-    "required": [
-      "encoded_state_type"
-    ]
-  },
-  "dependentSchemas": {
-    "optional": {
-      "if": {
+  "anyOf": [
+    {
+      "not": {
         "properties": {
-          "optional": {
-            "const": true
+          "parameter_type": {
+            "const": "state"
           }
         }
-      },
-      "then": {
-        "required": [
-          "default_value"
-        ]
       }
+    },
+    {
+      "required": [
+        "parameter_state_type"
+      ]
     }
-  }
+  ]
 }

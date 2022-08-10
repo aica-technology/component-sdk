@@ -17,9 +17,9 @@
       "description": "The lower_snake_case service name as it is declared in the component.",
       "type": "string"
     },
-    "has_payload": {
-      "description": "Indicate if the service has a string payload or is an empty trigger.",
-      "type": "boolean"
+    "payload_format": {
+      "description": "Optional description of the payload format if the service has a string payload. If omitted, the service is assumed to be an empty trigger.",
+      "type": "string"
     }
   },
   "required": [
