@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "https://github.com/aica-technology/dynamic-components/schema/schema/encoded_state_type.schema.json",
   "title": "Encoded State Type",
-  "description": "The state type of a encoded value from a collection of supported types, as defined in clproto.",
+  "description": "The state type of an encoded value from a collection of supported types, as defined in clproto.",
   "type": "string",
   "enum": [
     "state",

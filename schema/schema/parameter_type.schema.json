@@ -15,6 +15,6 @@
     "string_array",
     "vector",
     "matrix",
-    "json_encoded_state"
+    "state"
   ]
 }
