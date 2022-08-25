@@ -10,6 +10,7 @@ RUN sudo apt-get update && sudo apt-get install -y ros-${ROS_DISTRO}-ament-cmake
 # create a new ROS workspace
 USER ${USER}
 ENV WORKSPACE ${HOME}/component_ws
+ENV COLCON_WORKSPACE ${WORKSPACE}
 RUN mkdir -p ${WORKSPACE}/src
 WORKDIR ${WORKSPACE}
 RUN rosdep update
