@@ -7,7 +7,7 @@ class PyComponent(Component):
         super().__init__(node_name, *args, **kwargs)
         # add parameters, inputs and outputs here
 
-    def _validate_parameter(self, parameter: sr.Parameter) -> bool:
+    def on_validate_parameter_callback(self, parameter: sr.Parameter) -> bool:
         # validate an incoming parameter value according to some criteria
         return True
 
