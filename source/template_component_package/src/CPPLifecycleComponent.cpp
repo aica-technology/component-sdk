@@ -7,7 +7,7 @@ CPPLifecycleComponent::CPPLifecycleComponent(const rclcpp::NodeOptions& options)
 }
 
 bool
-CPPLifecycleComponent::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
+CPPLifecycleComponent::on_validate_parameter_callback(const std::shared_ptr<state_representation::ParameterInterface>&) {
   // validate an incoming parameter value according to some criteria
   return true;
 }

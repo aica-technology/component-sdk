@@ -8,7 +8,7 @@ public:
   explicit CPPLifecycleComponent(const rclcpp::NodeOptions& options);
 
 protected:
-  bool validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+  bool on_validate_parameter_callback(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 
   bool on_configure_callback() override;
   bool on_activate_callback() override;
