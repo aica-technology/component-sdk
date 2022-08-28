@@ -6,7 +6,7 @@ CPPComponent::CPPComponent(const rclcpp::NodeOptions& options) :
   // add parameters, inputs and outputs here
 }
 
-bool CPPComponent::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
+bool CPPComponent::on_validate_parameter_callback(const std::shared_ptr<state_representation::ParameterInterface>&) {
   // validate an incoming parameter value according to some criteria
   return true;
 }
