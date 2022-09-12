@@ -46,7 +46,7 @@ implementations. The following sections describe the steps required to implement
 ## Component package structure
 
 ### `./include/<pkg_name>/`
-This directory should contain all the C++ headers (`.h`) of the package.
+This directory should contain all the C++ headers (`.hpp`) of the package.
 
 ### `./src/`
 This directory should contain all the C++ source files (`.cpp`) of the package.
