@@ -243,7 +243,7 @@ foo_package/
         foo_package_foo.json
     include/
         foo_package/
-            Foo.h
+            Foo.hpp
     src/
         Foo.cpp
     ...
