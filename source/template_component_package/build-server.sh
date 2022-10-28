@@ -59,7 +59,7 @@ else
   BUILD_FLAGS+=(--ssh default="$HOME/.ssh/id_rsa")
 fi
 
-docker pull ghcr.io/aica-technology/component-sdk:"${BASE_IMAGE_TAG}"
+docker pull ghcr.io/aica-technology/component-sdk:"${BASE_IMAGE_TAG}" || exit 1
 DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . || exit 1
 
 if [ "${SERVE_REMOTE}" = true ]; then
