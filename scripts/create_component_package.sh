@@ -106,8 +106,15 @@ else
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPComponent.cpp
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_component.cpp
 
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"/CPPLifecycleComponent.hpp
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/src/CPPLifecycleComponent.cpp
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/cpp_tests/test_cpp_lifecycle_component.cpp
+
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_component.py
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_component.py
+
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_lifecycle_component.py
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_lifecycle_component.py
 
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/Dockerfile
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/build-server.sh
