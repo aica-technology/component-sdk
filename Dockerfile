@@ -14,7 +14,7 @@ ENV COLCON_WORKSPACE ${WORKSPACE}
 RUN mkdir -p ${WORKSPACE}/src
 WORKDIR ${WORKSPACE}
 RUN rosdep update
-RUN /bin/bash -c "source ${HOME}/ros2_ws/install/setup.bash; colcon build"
+RUN source ${HOME}/ros2_ws/install/setup.bash && colcon build
 
 # source the new workspace on login
 RUN echo "source ${WORKSPACE}/install/setup.bash" | cat - ${HOME}/.bashrc > tmp && mv tmp ${HOME}/.bashrc
