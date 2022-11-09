@@ -14,11 +14,11 @@ jobs:
     name: Build and publish component-sdk image
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build and Push
         uses: ./.github/actions/build-push
         with:
-          base_tag: galactic
+          base_tag: humble
           output_tag: latest
           secret: ${{ secrets.GITHUB_TOKEN }}

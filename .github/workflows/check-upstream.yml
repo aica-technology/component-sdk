@@ -3,7 +3,7 @@ name: Check for updated upstream images
 # Run scheduled workflow
 on:
   schedule:
-    - cron: '00 4,14 * * MON-FRI'
+    - cron: '00 5 * * MON-FRI'
   workflow_dispatch:
 
 env:
@@ -13,46 +13,46 @@ jobs:
 
   check-hash:
     runs-on: ubuntu-latest
-    name: Check latest hashes of ros2-modulo:galactic images
+    name: Check latest hashes of ros2-modulo:humble images
     outputs:
-      galactic_id: ${{ steps.check_galactic.outputs.id }}
-      latest_rebuild: ${{ steps.check_galactic.outputs.rebuild }}
-      galactic_devel_id: ${{ steps.check_galactic_devel.outputs.id }}
-      devel_rebuild: ${{ steps.check_galactic_devel.outputs.rebuild }}
+      humble_id: ${{ steps.check_humble.outputs.id }}
+      latest_rebuild: ${{ steps.check_humble.outputs.rebuild }}
+      humble_devel_id: ${{ steps.check_humble_devel.outputs.id }}
+      devel_rebuild: ${{ steps.check_humble_devel.outputs.rebuild }}
     steps:
       - name: Checkout CI branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ env.CI_BRANCH }}
 
-      - name: Check lastest hash of ros2-modulo:galactic image
-        id: check_galactic
+      - name: Check latest hash of ros2-modulo:humble image
+        id: check_humble
         run: |
-          curl -o ros2-modulo-galactic-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/galactic-hash
-          NEW_HASH=$(cat ./ros2-modulo-galactic-hash || echo '')
-          OLD_HASH=$(cat ./galactic-hash || echo '')
+          curl -o ros2-modulo-humble-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-hash
+          NEW_HASH=$(cat ./ros2-modulo-humble-hash || echo '')
+          OLD_HASH=$(cat ./humble-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
-            echo "The ros2-modulo:galactic image did not change."
+            echo "The ros2-modulo:humble image did not change."
             echo "::set-output name=rebuild::false"
             echo "::set-output name=id::${OLD_HASH}"
           else
-            echo "ros2-modulo:galactic image has been updated, rebuilding image now..."
+            echo "ros2-modulo:humble image has been updated, rebuilding image now..."
             echo "::set-output name=rebuild::true"
             echo "::set-output name=id::${NEW_HASH}"
           fi
 
-      - name: Check lastest hash on ros2-modulo:galactic-devel image
-        id: check_galactic_devel
+      - name: Check latest hash on ros2-modulo:humble-devel image
+        id: check_humble_devel
         run: |
-          curl -o ros2-modulo-galactic-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/galactic-devel-hash
-          NEW_HASH=$(cat ./ros2-modulo-galactic-devel-hash || echo '')
-          OLD_HASH=$(cat ./galactic-devel-hash || echo '')
+          curl -o ros2-modulo-humble-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-devel-hash
+          NEW_HASH=$(cat ./ros2-modulo-humble-devel-hash || echo '')
+          OLD_HASH=$(cat ./humble-devel-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
-            echo "The ros2-modulo:galactic-devel image did not change."
+            echo "The ros2-modulo:humble-devel image did not change."
             echo "::set-output name=rebuild::false"
             echo "::set-output name=id::${OLD_HASH}"
           else
-            echo "ros2-modulo:galactic-devel image has been updated, rebuilding image now..."
+            echo "ros2-modulo:humble-devel image has been updated, rebuilding image now..."
             echo "::set-output name=rebuild::true"
             echo "::set-output name=id::${NEW_HASH}"
           fi
@@ -64,14 +64,14 @@ jobs:
     if: needs.check-hash.outputs.latest_rebuild == 'true'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: develop
 
       - name: Build new latest image
         uses: ./.github/actions/build-push
         with:
-          base_tag: galactic
+          base_tag: humble
           output_tag: latest
           secret: ${{ secrets.GITHUB_TOKEN }}
 
@@ -82,14 +82,14 @@ jobs:
     if: needs.check-hash.outputs.devel_rebuild == 'true'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: develop
 
       - name: Build new devel image
         uses: ./.github/actions/build-push
         with:
-          base_tag: galactic-devel
+          base_tag: humble-devel
           output_tag: devel
           secret: ${{ secrets.GITHUB_TOKEN }}
 
@@ -100,7 +100,7 @@ jobs:
     if: needs.check-hash.outputs.latest_rebuild == 'true' || needs.check-hash.outputs.devel_rebuild == 'true'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Recreate ci branch
         run: |
@@ -111,13 +111,13 @@ jobs:
       - name: Write latest hash to file
         uses: ./.github/actions/write-hash
         with:
-          hash: ${{ needs.check-hash.outputs.galactic_id }}
-          file: './galactic-hash'
+          hash: ${{ needs.check-hash.outputs.humble_id }}
+          file: './humble-hash'
           ci_branch: ${{ env.CI_BRANCH }}
 
       - name: Write devel hash to file
         uses: ./.github/actions/write-hash
         with:
-          hash: ${{ needs.check-hash.outputs.galactic_devel_id }}
-          file: './galactic-devel-hash'
+          hash: ${{ needs.check-hash.outputs.humble_devel_id }}
+          file: './humble-devel-hash'
           ci_branch: ${{ env.CI_BRANCH }}
