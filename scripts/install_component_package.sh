@@ -112,4 +112,4 @@ for COMPONENT in "${COMPONENT_LIST[@]}"; do
     fi
   fi
 done
-cd CURRENT_DIR && rm -rf ${INSTALLATION_DIR} || exit 1
+cd "${CURRENT_DIR}" && rm -rf "${INSTALLATION_DIR}" || exit 1
