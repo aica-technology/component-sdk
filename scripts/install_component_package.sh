@@ -6,6 +6,7 @@
 function install_dependencies() {
     COMPONENT_DIR="$(find ~+ -type d -name "$1" -print -quit)"
     DESTINATION_DIR="$2"
+    INSTALLATION_DIR="$3"
 
     if [ -z "${COMPONENT_DIR}" ]; then
         echo "Component not found"
@@ -27,9 +28,9 @@ function install_dependencies() {
     for SCRIPT in "${INSTALL_SCRIPT[@]}"
     do
         if [ -n "${SCRIPT}" ]; then
-            cd "${COMPONENT_DIR}" || exit 1
-            echo "Running install script: ${SCRIPT}"
-            bash "${SCRIPT}" || exit 1
+            cd "${INSTALLATION_DIR}" || exit 1
+            echo "Running install script: ${COMPONENT_DIR}/${SCRIPT}"
+            bash "${COMPONENT_DIR}/${SCRIPT}" || exit 1
         fi
     done
 
@@ -67,6 +68,7 @@ Options:
 CURRENT_DIR=$(pwd)
 
 DESTINATION_DIR=""
+INSTALLATION_DIR=/tmp/components_installation
 FORCE=0
 COMPONENT_LIST=()
 
@@ -78,6 +80,7 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -d|--destination) DESTINATION_DIR="$2"; shift 2;;
+    --installation-dir) INSTALLATION_DIR="$2"; shift 2;;
     --force) FORCE=1; shift 1;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
     *) COMPONENT_LIST+=("$1"); shift 1;;
@@ -95,6 +98,7 @@ else
   echo "${HELP_MESSAGE}" && exit 1
 fi
 
+mkdir -p "${INSTALLATION_DIR}" || exit 1
 for COMPONENT in "${COMPONENT_LIST[@]}"; do
   if [ -n "${COMPONENT}" ]; then
     cd "${CURRENT_DIR}" || exit 1
@@ -104,7 +108,8 @@ for COMPONENT in "${COMPONENT_LIST[@]}"; do
       echo "option if you wish to reinstall the component package and its dependencies." && exit 0
     else
       echo "Installing dependencies for component ${COMPONENT}"
-      install_dependencies "${COMPONENT}" "${DESTINATION_DIR}"
+      install_dependencies "${COMPONENT}" "${DESTINATION_DIR}" "${INSTALLATION_DIR}"
     fi
   fi
 done
+cd CURRENT_DIR && rm -rf ${INSTALLATION_DIR} || exit 1
