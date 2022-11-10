@@ -42,6 +42,7 @@ function install_dependencies() {
     echo "Installation of component $1 complete"
 }
 
+INSTALLATION_DIR=/tmp/components_installation
 HELP_MESSAGE="
 Usage: ./install_component_package.sh <pkg_names> -d <destination> [--force]
 
@@ -58,6 +59,9 @@ Parameters:
                                     specified directory (path can be absolute
                                     or relative).
 
+  --dependencies-install-dir        The installation directory for component
+                                    dependencies (default: ${INSTALLATION_DIR}).
+
 Options:
   --force                           Force the component package and its dependencies
                                     to be reinstalled if it already exists.
@@ -68,7 +72,6 @@ Options:
 CURRENT_DIR=$(pwd)
 
 DESTINATION_DIR=""
-INSTALLATION_DIR=/tmp/components_installation
 FORCE=0
 COMPONENT_LIST=()
 
@@ -80,7 +83,7 @@ fi
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -d|--destination) DESTINATION_DIR="$2"; shift 2;;
-    --installation-dir) INSTALLATION_DIR="$2"; shift 2;;
+    --dependencies-install-dir) INSTALLATION_DIR="$2"; shift 2;;
     --force) FORCE=1; shift 1;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
     *) COMPONENT_LIST+=("$1"); shift 1;;
