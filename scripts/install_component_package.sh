@@ -29,8 +29,8 @@ function install_dependencies() {
     do
         if [ -n "${SCRIPT}" ]; then
             cd "${INSTALLATION_DIR}" || exit 1
-            echo "Running install script: ${COMPONENT_DIR}/${SCRIPT}"
-            bash "${COMPONENT_DIR}/${SCRIPT}" || exit 1
+            echo "Running install script: ${SCRIPT}"
+            bash "${SCRIPT}" || exit 1
         fi
     done
 
