@@ -24,9 +24,12 @@ WORKDIR ${WORKSPACE}
 
 FROM development as production
 # install all dependencies and build the component workspace
-RUN /bin/bash -c "source ${WORKSPACE}/install/setup.bash; colcon build --symlink-install"
+RUN source ${WORKSPACE}/install/setup.bash; colcon build --symlink-install
+
+# clean image
+RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
 
 
 FROM production as test-sources
 # run the unit tests of the built workspace
-RUN /bin/bash -c "source ${WORKSPACE}/install/setup.bash; colcon test --return-code-on-test-failure"
+RUN source ${WORKSPACE}/install/setup.bash; colcon test --return-code-on-test-failure
