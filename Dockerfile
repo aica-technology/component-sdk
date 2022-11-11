@@ -1,4 +1,4 @@
-ARG BASE_TAG=galactic
+ARG BASE_TAG=humble
 FROM ghcr.io/aica-technology/ros2-modulo:${BASE_TAG} as workspace
 
 # set default shell
