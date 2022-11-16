@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "id": "https://github.com/aica-technology/dynamic-components/schema/schema/parameter.schema.json",
+  "id": "https://github.com/aica-technology/component-sdk/schema/schema/parameter.schema.json",
   "title": "Component Parameter",
   "description": "A dynamic component parameter that is publicly configurable.",
   "type": "object",
