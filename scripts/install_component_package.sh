@@ -28,6 +28,7 @@ function install_dependencies() {
     for SCRIPT in "${INSTALL_SCRIPT[@]}"
     do
         if [ -n "${SCRIPT}" ]; then
+            mkdir -p "${INSTALLATION_DIR}" || exit 1
             cd "${INSTALLATION_DIR}" || exit 1
             echo "Running install script: ${SCRIPT}"
             bash "${SCRIPT}" || exit 1
@@ -101,7 +102,6 @@ else
   echo "${HELP_MESSAGE}" && exit 1
 fi
 
-mkdir -p "${INSTALLATION_DIR}" || exit 1
 for COMPONENT in "${COMPONENT_LIST[@]}"; do
   if [ -n "${COMPONENT}" ]; then
     cd "${CURRENT_DIR}" || exit 1
