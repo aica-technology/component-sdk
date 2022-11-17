@@ -42,7 +42,7 @@
       ],
       "anyOf": [
         {"type": "string"},
-        {"type": null}
+        {"type": "null"}
       ]
     },
     "dynamic": {
