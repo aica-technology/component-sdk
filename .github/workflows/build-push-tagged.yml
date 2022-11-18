@@ -22,8 +22,8 @@ jobs:
           echo "TAG=${TAG}" >> $GITHUB_ENV
 
       - name: Build and Push
-        uses: ./.github/actions/build-push
+        uses: ./.github/actions/build-push-multi-arch
         with:
           base_tag: humble
-          output_tag: ${TAG}
+          output_tag: ${{ env.TAG }}
           secret: ${{ secrets.GITHUB_TOKEN }}
