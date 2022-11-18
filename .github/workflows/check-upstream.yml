@@ -3,7 +3,7 @@ name: Check for updated upstream images
 # Run scheduled workflow
 on:
   schedule:
-    - cron: '00 5 * * MON-FRI'
+    - cron: '00 5 * * MON'
   workflow_dispatch:
 
 env:
@@ -25,7 +25,7 @@ jobs:
         with:
           ref: ${{ env.CI_BRANCH }}
 
-      - name: Check latest hash of ros2-modulo:humble image
+      - name: Check hash of ros2-modulo:humble image
         id: check_humble
         run: |
           curl -o ros2-modulo-humble-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-hash
@@ -33,12 +33,12 @@ jobs:
           OLD_HASH=$(cat ./humble-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
             echo "The ros2-modulo:humble image did not change."
-            echo "::set-output name=rebuild::false"
-            echo "::set-output name=id::${OLD_HASH}"
+            echo "rebuild=false" >> $GITHUB_OUTPUT
+            echo "id=${OLD_HASH}" >> $GITHUB_OUTPUT
           else
             echo "ros2-modulo:humble image has been updated, rebuilding image now..."
-            echo "::set-output name=rebuild::true"
-            echo "::set-output name=id::${NEW_HASH}"
+            echo "rebuild=true" >> $GITHUB_OUTPUT
+            echo "id=${NEW_HASH}" >> $GITHUB_OUTPUT
           fi
 
       - name: Check latest hash on ros2-modulo:humble-devel image
@@ -49,12 +49,12 @@ jobs:
           OLD_HASH=$(cat ./humble-devel-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
             echo "The ros2-modulo:humble-devel image did not change."
-            echo "::set-output name=rebuild::false"
-            echo "::set-output name=id::${OLD_HASH}"
+            echo "rebuild=false" >> $GITHUB_OUTPUT
+            echo "id=${OLD_HASH}" >> $GITHUB_OUTPUT
           else
             echo "ros2-modulo:humble-devel image has been updated, rebuilding image now..."
-            echo "::set-output name=rebuild::true"
-            echo "::set-output name=id::${NEW_HASH}"
+            echo "rebuild=true" >> $GITHUB_OUTPUT
+            echo "id=${NEW_HASH}" >> $GITHUB_OUTPUT
           fi
 
   rebuild-latest-image:
@@ -65,15 +65,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          ref: develop
 
       - name: Build new latest image
-        uses: ./.github/actions/build-push
+        uses: ./.github/actions/build-push-multi-arch
         with:
+          repo_branch: develop
           base_tag: humble
           output_tag: latest
           secret: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write hash to file and push to ci branch
+        uses: ./.github/actions/write-hash
+        with:
+          hash: ${{ needs.check-hash.outputs.humble_id }}
+          file: ./humble-hash
+          ci_branch: ${{ env.CI_BRANCH }}
 
   rebuild-devel-image:
     needs: check-hash
@@ -83,41 +89,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          ref: develop
 
       - name: Build new devel image
-        uses: ./.github/actions/build-push
+        uses: ./.github/actions/build-push-multi-arch
         with:
+          repo_branch: develop
           base_tag: humble-devel
           output_tag: devel
           secret: ${{ secrets.GITHUB_TOKEN }}
 
-  write-hashes:
-    needs: check-hash
-    runs-on: ubuntu-latest
-    name: Create new ci branch from main and write hashes
-    if: needs.check-hash.outputs.latest_rebuild == 'true' || needs.check-hash.outputs.devel_rebuild == 'true'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Recreate ci branch
-        run: |
-          git config user.name github-actions
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git checkout -b ${{ env.CI_BRANCH }} origin/main && git push -f -u origin ${{ env.CI_BRANCH }}
-
-      - name: Write latest hash to file
-        uses: ./.github/actions/write-hash
-        with:
-          hash: ${{ needs.check-hash.outputs.humble_id }}
-          file: './humble-hash'
-          ci_branch: ${{ env.CI_BRANCH }}
-
-      - name: Write devel hash to file
+      - name: Write hash to file and push to ci branch
         uses: ./.github/actions/write-hash
         with:
           hash: ${{ needs.check-hash.outputs.humble_devel_id }}
-          file: './humble-devel-hash'
+          file: ./humble-devel-hash
           ci_branch: ${{ env.CI_BRANCH }}
