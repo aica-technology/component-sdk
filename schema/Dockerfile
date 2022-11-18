@@ -1,6 +1,7 @@
 FROM python:3.9-alpine as dependencies
 
-RUN python -m pip install jsonschema json-schema-for-humans
+RUN apk update && apk add gcc libc-dev
+RUN python -m pip install check-jsonschema json-schema-for-humans
 
 
 FROM dependencies as sources
@@ -9,7 +10,7 @@ COPY ./schema /schema
 
 
 FROM sources as validate
-ENTRYPOINT ["jsonschema", "/schema/component.schema.json", "--base-uri", "file:///schema/component.schema.json", "--instance"]
+ENTRYPOINT ["check-jsonschema", "--schemafile", "/schema/component.schema.json"]
 
 
 FROM sources as generate-docs
