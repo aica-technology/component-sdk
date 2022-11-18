@@ -12,7 +12,7 @@ FILENAME=$(basename "${JSON_FILE}")
 IMAGE_NAME=aica-technology/component-sdk/schema:validate
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-docker build --target validate --tag "${IMAGE_NAME}" "${SCRIPT_DIR}"
+docker build --target validate --tag "${IMAGE_NAME}" "${SCRIPT_DIR}" || exit 1
 
 # mount a volume to share the file, attach to stderr, pass the filename to the entrypoint and redirect any output from stderr to stdout
 STDERR_CAPTURE=$(docker run -a stderr --rm --volume "$FULL_PATH":/home/validate "${IMAGE_NAME}" \

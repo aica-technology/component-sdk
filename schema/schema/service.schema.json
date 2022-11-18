@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "id": "https://github.com/aica-technology/dynamic-components/schema/schema/service.schema.json",
+  "id": "https://github.com/aica-technology/component-sdk/schema/schema/service.schema.json",
   "title": "Component Service",
   "description": "A service endpoint of a dynamic component.",
   "type": "object",
