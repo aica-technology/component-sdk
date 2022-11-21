@@ -17,7 +17,7 @@ jobs:
       - name: Parse tag
         shell: bash
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
+          TAG="${GITHUB_REF_NAME}"
           TAG="${TAG/\//-}"
           echo "TAG=${TAG}" >> $GITHUB_ENV
 

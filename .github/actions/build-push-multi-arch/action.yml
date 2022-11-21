@@ -35,7 +35,7 @@ runs:
         echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
         
         if [ -z ${{ inputs.repo_branch }} ]; then
-          BRANCH=${GITHUB_REF#refs/heads/}
+          BRANCH=${GITHUB_REF_NAME}
         else
           BRANCH=${{ inputs.repo_branch }}
         fi
