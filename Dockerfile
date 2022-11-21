@@ -4,9 +4,6 @@ FROM ghcr.io/aica-technology/ros2-modulo:${BASE_TAG} as workspace
 # set default shell
 SHELL ["/bin/bash", "-c"]
 
-# upgrade ament_cmake_python
-RUN sudo apt-get update && sudo apt-get install -y ros-${ROS_DISTRO}-ament-cmake-python && sudo rm -rf /var/lib/apt/lists/*
-
 # create a new ROS workspace
 USER ${USER}
 ENV WORKSPACE ${HOME}/component_ws
