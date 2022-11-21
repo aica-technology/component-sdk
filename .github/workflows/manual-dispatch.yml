@@ -1,4 +1,4 @@
-name: Manual Build and Push
+name: Manual build and push
 
 # Run workflow by manual dispatch
 on:
@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build and Push
-        uses: ./.github/actions/build-push
+        uses: ./.github/actions/build-push-multi-arch
         with:
           base_tag: ${{ github.event.inputs.base_tag }}
           output_tag: ${{ github.event.inputs.output_tag }}
