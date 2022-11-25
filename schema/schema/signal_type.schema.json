@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "id": "https://github.com/aica-technology/component-sdk/schema/schema/signal_type.schema.json",
+  "id": "https://raw.githubusercontent.com/aica-technology/component-sdk/main/schema/schema/signal_type.schema.json",
   "title": "Signal Type",
   "description": "Supported signal value types as simple atomic types or encoded state types.",
   "anyOf": [
