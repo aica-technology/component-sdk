@@ -5,7 +5,7 @@
     "details": "A longer description of the example component"
   },
   "registration": "foo_package::Foo",
-  "inherits": "modulo_componentss::Component",
+  "inherits": "modulo_components::Component",
   "inputs": [
     {
       "display_name": "Input 1",

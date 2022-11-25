@@ -266,9 +266,10 @@ To set up validation for the component description schema, follow the steps give
 [Configure a custom JSON schema](https://www.jetbrains.com/help/clion/json.html#6768673a).
 
 For step 3, give the Schema a useful name (such as "Component Description") and choose JSON Schema version 7.
-In the "Schema file or URL field", specify the path to the `component.schema.json` file.
-For example, if the local copy of the Component SDK repository is saved to `/home/user/component-sdk`,
-then specify the Schema file path as `/home/user/component-sdk/schema/schema/component.schema.json`.
+In the "Schema file or URL field", enter the following URL:
+```
+https://raw.githubusercontent.com/aica-technology/component-sdk/main/schema/schema/component.schema.json
+```
 
 For step 4, either manually specify files and directories to be validated, or use the file path pattern
 `component_descriptions/*.json` to detect all component description in compatible packages.
