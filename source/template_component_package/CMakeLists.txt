@@ -43,6 +43,9 @@ install(TARGETS ${COMPONENTS}
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin)
 
+install(DIRECTORY ./component_descriptions
+        DESTINATION .)
+
 # install Python modules
 ament_python_install_package(${PROJECT_NAME} SCRIPTS_DESTINATION lib/${PROJECT_NAME})
 

@@ -73,6 +73,13 @@ cp -r "${TEMPLATE_DIR}" "${COMPONENT_PKG_DIR}"
 mv "${COMPONENT_PKG_DIR}"/template_component_package "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"
 mv "${COMPONENT_PKG_DIR}"/include/template_component_package "${COMPONENT_PKG_DIR}"/include/"${COMPONENT_PKG_NAME}"
 
+# rename the template component descriptions
+DESCRIPTION_DIR="${COMPONENT_PKG_DIR}"/component_descriptions
+mv "${DESCRIPTION_DIR}"/template_component_package_cpp_component.json "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_component.json
+mv "${DESCRIPTION_DIR}"/template_component_package_cpp_lifecycle_component.json "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_lifecycle_component.json
+mv "${DESCRIPTION_DIR}"/template_component_package_py_component.json "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_component.json
+mv "${DESCRIPTION_DIR}"/template_component_package_py_lifecycle_component.json "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_lifecycle_component.json
+
 # sed template_component_package in files
 if [[ "$OSTYPE" == "darwin"* ]]; then
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/README.md
@@ -93,6 +100,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_lifecycle_component.py
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_lifecycle_component.py
+
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_component.json
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_lifecycle_component.json
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_component.json
+  sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_lifecycle_component.json
 
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/Dockerfile
   sed -i '' "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/build-server.sh
@@ -115,6 +127,11 @@ else
 
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/"${COMPONENT_PKG_NAME}"/py_lifecycle_component.py
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/test/python_tests/test_py_lifecycle_component.py
+
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_component.json
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_cpp_lifecycle_component.json
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_component.json
+  sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${DESCRIPTION_DIR}"/"${COMPONENT_PKG_NAME}"_py_lifecycle_component.json
 
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/Dockerfile
   sed -i "s/template_component_package/${COMPONENT_PKG_NAME}/g" "${COMPONENT_PKG_DIR}"/build-server.sh
