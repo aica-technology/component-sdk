@@ -11,7 +11,8 @@
         "int",
         "double",
         "double_array",
-        "string"
+        "string",
+        "other"
       ]
     },
     {
