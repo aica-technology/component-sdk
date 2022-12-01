@@ -23,6 +23,13 @@
         "double_array"
       ],
       "default_type": "double"
+    },
+    {
+      "description": "Input 3",
+      "display_name": "An example input with a custom signal type",
+      "signal_name": "foo_in_3",
+      "signal_type": "other",
+      "custom_signal_type": "foo"
     }
   ],
   "input_collections": [

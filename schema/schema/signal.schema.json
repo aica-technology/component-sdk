@@ -77,5 +77,34 @@
         "default_type"
       ]
     }
-  ]
+  ],
+  "if": {
+    "not": {
+      "required": [
+        "signal_type"
+      ]
+    }
+  },
+  "else": {
+    "if": {
+      "properties": {
+        "signal_type": {
+          "const": "other"
+        }
+      }
+    },
+    "then": {
+      "custom_signal_type": {
+        "description": "The custom signal type of the signal",
+        "examples": [
+          "sensor_msgs::msg::JointState",
+          "geometry_msgs::msg::Pose"
+        ],
+        "type": "string"
+      },
+      "required": [
+        "custom_signal_type"
+      ]
+    }
+  }
 }

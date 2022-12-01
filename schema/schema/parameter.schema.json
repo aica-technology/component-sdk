@@ -41,8 +41,12 @@
         null
       ],
       "anyOf": [
-        {"type": "string"},
-        {"type": "null"}
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
       ]
     },
     "dynamic": {
@@ -57,20 +61,16 @@
     "parameter_type",
     "default_value"
   ],
-  "anyOf": [
-    {
-      "not": {
-        "properties": {
-          "parameter_type": {
-            "const": "state"
-          }
-        }
+  "if": {
+    "properties": {
+      "parameter_type": {
+        "const": "state"
       }
-    },
-    {
-      "required": [
-        "parameter_state_type"
-      ]
     }
-  ]
+  },
+  "then": {
+    "required": [
+      "parameter_state_type"
+    ]
+  }
 }
