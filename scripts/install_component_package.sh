@@ -4,7 +4,7 @@
 # there might be subdirectories containing the same name so we only select first occurrence
 # tilde extension is used to return absolute path for subsequent finds
 function install_dependencies() {
-    COMPONENT_DIR="$(find ~+ -type d -name "$1" -print -quit)"
+    COMPONENT_DIR="$(find ~+ -type d -name "$1" -exec test -e '{}'/package.xml \; -print -quit)"
     DESTINATION_DIR="$2"
     INSTALLATION_DIR="$3"
 
