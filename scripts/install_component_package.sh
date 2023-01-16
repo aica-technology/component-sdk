@@ -6,7 +6,7 @@
 function install_dependencies() {
     COMPONENT_DIR="$(find ~+ -type d -name "$1" -exec test -e '{}'/package.xml \; -print -quit)"
     DESTINATION_DIR="$2"
-    INSTALLATION_DIR="$3"/"$1"
+    COMP_INSTALL_DIR="$3"/"$1"
 
     if [ -z "${COMPONENT_DIR}" ]; then
         echo "Component not found"
@@ -28,8 +28,8 @@ function install_dependencies() {
     for SCRIPT in "${INSTALL_SCRIPT[@]}"
     do
         if [ -n "${SCRIPT}" ]; then
-            mkdir -p "${INSTALLATION_DIR}" || exit 1
-            cd "${INSTALLATION_DIR}" || exit 1
+            mkdir -p "${COMP_INSTALL_DIR}" || exit 1
+            cd "${COMP_INSTALL_DIR}" || exit 1
             echo "Running install script: ${SCRIPT}"
             bash "${SCRIPT}" || exit 1
         fi
@@ -40,7 +40,7 @@ function install_dependencies() {
       echo "Moving component from ${COMPONENT_DIR} to ${DESTINATION_DIR}"
       cp -rn "${COMPONENT_DIR}" "${DESTINATION_DIR}"
     fi
-    rm -rf "${INSTALLATION_DIR}"
+    rm -rf "${COMP_INSTALL_DIR}"
     echo "Installation of component $1 complete"
 }
 
