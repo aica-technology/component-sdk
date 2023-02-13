@@ -7,23 +7,32 @@ on:
 
 jobs:
 
-  build-publish-tagged-component-sdk:
+  parse-tag:
     runs-on: ubuntu-latest
-    name: Build and publish component-sdk image
+    name: Parse tag
+    outputs:
+      tag: ${{ steps.parse.outputs.tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Parse tag
-        shell: bash
+        id: parse
         run: |
           TAG="${GITHUB_REF_NAME}"
           TAG="${TAG/\//-}"
-          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
-      - name: Build and Push
-        uses: ./.github/actions/build-push-multi-arch
-        with:
-          base_tag: humble
-          output_tag: ${{ env.TAG }}
-          secret: ${{ secrets.GITHUB_TOKEN }}
+  build-publish-tagged:
+    needs: parse-tag
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    name: Build and publish tagged component-sdk image
+    with:
+      image_name: ${{ github.repository }}
+      image_tags: ${{ needs.parse-tag.outputs.tag }}
+      build_context_path: .
+      dockerfile_path: Dockerfile
+      platforms: linux/amd64,linux/arm64
+      build_flags: '--build-arg BASE_TAG=humble'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
