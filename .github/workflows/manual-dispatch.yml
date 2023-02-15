@@ -15,13 +15,11 @@ on:
 
 jobs:
   build-publish:
-    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
     name: Build and publish image
     with:
       image_name: ${{ github.repository }}
       image_tags: ${{ inputs.output_tag }}
-      build_context_path: .
-      dockerfile_path: Dockerfile
       platforms: linux/amd64,linux/arm64
       build_flags: '--build-arg BASE_TAG=${{ inputs.base_tag }}'
     secrets:

@@ -41,13 +41,11 @@ jobs:
 
   build-publish-latest:
     needs: create-new-ci-branch
-    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
     name: Build and publish latest component-sdk image
     with:
       image_name: ${{ github.repository }}
       image_tags: latest
-      build_context_path: .
-      dockerfile_path: Dockerfile
       platforms: linux/amd64,linux/arm64
       build_flags: '--build-arg BASE_TAG=humble'
     secrets:
@@ -55,13 +53,11 @@ jobs:
 
   build-publish-devel:
     needs: create-new-ci-branch
-    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
     name: Build and publish devel component-sdk image
     with:
       image_name: ${{ github.repository }}
       image_tags: devel
-      build_context_path: .
-      dockerfile_path: Dockerfile
       platforms: linux/amd64,linux/arm64
       build_flags: '--build-arg BASE_TAG=humble-devel'
     secrets:
@@ -69,7 +65,7 @@ jobs:
 
   write-latest-hash:
     needs: [ create-new-ci-branch, build-publish-latest ]
-    uses: aica-technology/.github/.github/workflows/write-file.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
     name: Write ros2-modulo:humble hash to file
     with:
       content: ${{ needs.create-new-ci-branch.outputs.latest_hash }}
@@ -78,7 +74,7 @@ jobs:
 
   write-devel-hash:
     needs: [ create-new-ci-branch, build-publish-devel ]
-    uses: aica-technology/.github/.github/workflows/write-file.yml@ed4ba3f4327b2a61948cde7b4e9410363114c478
+    uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
     name: Write ros2-modulo:humble-devel hash to file
     with:
       content: ${{ needs.create-new-ci-branch.outputs.devel_hash }}
