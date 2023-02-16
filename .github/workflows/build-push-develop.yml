@@ -14,84 +14,69 @@ jobs:
   create-new-ci-branch:
     runs-on: ubuntu-latest
     name: Create new ci branch from develop
+    outputs:
+      latest_hash: ${{ steps.recreate.outputs.latest_hash }}
+      devel_hash: ${{ steps.recreate.outputs.devel_hash }}
+      ci_branch: ${{ steps.recreate.outputs.ci_branch }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Recreate ci branch
+        id: recreate
         run: |
-          git config user.name github-actions
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git checkout -b ${{ env.CI_BRANCH }} origin/develop && git push -f -u origin ${{ env.CI_BRANCH }}
-
-  build-publish-latest-component-sdk:
-    needs: create-new-ci-branch
-    runs-on: ubuntu-latest
-    name: Build and publish latest component-sdk image
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Build and Push
-        uses: ./.github/actions/build-push-multi-arch
-        with:
-          base_tag: humble
-          output_tag: latest
-          secret: ${{ secrets.GITHUB_TOKEN }}
-
-  build-publish-devel-component-sdk:
-    needs: create-new-ci-branch
-    runs-on: ubuntu-latest
-    name: Build and publish devel component-sdk image
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Build and Push
-        uses: ./.github/actions/build-push-multi-arch
-        with:
-          base_tag: humble-devel
-          output_tag: devel
-          secret: ${{ secrets.GITHUB_TOKEN }}
-
-  write-latest-hash:
-    needs: build-publish-latest-component-sdk
-    runs-on: ubuntu-latest
-    name: Write ros2-modulo:humble hash to file
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get hash of ros2-modulo:humble image
-        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          BRANCH=${{ env.CI_BRANCH }}
+          git checkout -b ${BRANCH} origin/develop && git push -f -u origin ${BRANCH}
+          echo "ci_branch=${BRANCH}" >> $GITHUB_OUTPUT
+          
           curl -o ros2-modulo-humble-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-hash
           HASH=$(cat ./ros2-modulo-humble-hash || echo '')
-          echo "LATEST_HASH=${HASH}" >> $GITHUB_ENV
-
-      - name: Write latest hash to file
-        uses: ./.github/actions/write-hash
-        with:
-          hash: ${{ env.LATEST_HASH }}
-          file: ./humble-hash
-          ci_branch: ${{ env.CI_BRANCH }}
-
-  write-devel-hash:
-    needs: build-publish-devel-component-sdk
-    runs-on: ubuntu-latest
-    name: Write ros2-modulo:humble-devel hash to file
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get hash of ros2-modulo:humble-devel image
-        run: |
+          echo "latest_hash=${HASH}" >> $GITHUB_OUTPUT
+          
           curl -o ros2-modulo-humble-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-devel-hash
           HASH=$(cat ./ros2-modulo-humble-devel-hash || echo '')
-          echo "DEVEL_HASH=${HASH}" >> $GITHUB_ENV
+          echo "devel_hash=${HASH}" >> $GITHUB_OUTPUT
 
-      - name: Write devel hash to file
-        uses: ./.github/actions/write-hash
-        with:
-          hash: ${{ env.DEVEL_HASH }}
-          file: ./humble-devel-hash
-          ci_branch: ${{ env.CI_BRANCH }}
+  build-publish-latest:
+    needs: create-new-ci-branch
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
+    name: Build and publish latest component-sdk image
+    with:
+      image_name: ${{ github.repository }}
+      image_tags: latest
+      platforms: linux/amd64,linux/arm64
+      build_flags: '--build-arg BASE_TAG=humble'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-publish-devel:
+    needs: create-new-ci-branch
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
+    name: Build and publish devel component-sdk image
+    with:
+      image_name: ${{ github.repository }}
+      image_tags: devel
+      platforms: linux/amd64,linux/arm64
+      build_flags: '--build-arg BASE_TAG=humble-devel'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  write-latest-hash:
+    needs: [ create-new-ci-branch, build-publish-latest ]
+    uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
+    name: Write ros2-modulo:humble hash to file
+    with:
+      content: ${{ needs.create-new-ci-branch.outputs.latest_hash }}
+      filepath: ./humble-hash
+      branch: ${{ needs.create-new-ci-branch.outputs.ci_branch }}
+
+  write-devel-hash:
+    needs: [ create-new-ci-branch, build-publish-devel ]
+    uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
+    name: Write ros2-modulo:humble-devel hash to file
+    with:
+      content: ${{ needs.create-new-ci-branch.outputs.devel_hash }}
+      filepath: ./humble-devel-hash
+      branch: ${{ needs.create-new-ci-branch.outputs.ci_branch }}

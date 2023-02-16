@@ -7,23 +7,20 @@ on:
       base_tag:
         description: 'The tag of the base image to use'
         required: true
-        default: ''
+        type: string
       output_tag:
         description: 'The tag for the output image'
         required: true
-        default: ''
+        type: string
 
 jobs:
   build-publish:
-    runs-on: ubuntu-latest
+    uses: aica-technology/.github/.github/workflows/build-push-multi-arch.yml@v0.1
     name: Build and publish image
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Build and Push
-        uses: ./.github/actions/build-push-multi-arch
-        with:
-          base_tag: ${{ github.event.inputs.base_tag }}
-          output_tag: ${{ github.event.inputs.output_tag }}
-          secret: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      image_name: ${{ github.repository }}
+      image_tags: ${{ inputs.output_tag }}
+      platforms: linux/amd64,linux/arm64
+      build_flags: '--build-arg BASE_TAG=${{ inputs.base_tag }}'
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
