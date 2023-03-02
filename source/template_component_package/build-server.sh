@@ -1,5 +1,5 @@
 #!/bin/bash
-BASE_IMAGE_TAG=latest
+BASE_IMAGE_TAG=devel
 
 PKG_NAME=template_component_package
 IMAGE_NAME="${PKG_NAME//[_]/-}"
