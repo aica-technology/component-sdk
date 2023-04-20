@@ -87,7 +87,7 @@ distinctly by consumers of the component description.
 #### Virtual components
 
 With the inheritance pattern, a base component class can implement common properties and behaviors that derived
-components extend. In some cases, the base class itself might not be intended to be instantiated and used a component
+components extend. In some cases, the base class itself might not be intended to be instantiated or used as a component
 directly. For example, a base motion generator may define common parameters, signals and logic, but might produce no
 output if the signal calculation is left for derived classes to implement. Such base components may be considered
 "virtual" or "abstract".
