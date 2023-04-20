@@ -84,6 +84,22 @@ Components that derive directly from `modulo_components::Component` or `modulo_c
 should also specify this under the `inherits` property. These core base classes should be identified and treated
 distinctly by consumers of the component description.
 
+#### Virtual components
+
+With the inheritance pattern, a base component class can implement common properties and behaviors that derived
+components extend. In some cases, the base class itself might not be intended to be instantiated and used a component
+directly. For example, a base motion generator may define common parameters, signals and logic, but might produce no
+output if the signal calculation is left for derived classes to implement. Such base components may be considered
+"virtual" or "abstract".
+
+The `virtual` property is a boolean flag which, if true, indicates that a component class is an abstract or virtual
+base class not intended for instantiation. It is an optional property and is assumed to be false if omitted. 
+Consumers of the component description can use this property to handle virtual base classes distinctly; for example,
+virtual components might be hidden in drop-down menus or lists of available and instantiable components.
+
+The core classes `modulo_components::Component` and `modulo_components::LifecycleComponent` are examples of virtual
+components, as they provide no meaningful behavior if directly instantiated.
+
 ## Signals
 
 The signals of a component should be described according to [signal.schema.json](./schema/signal.schema.json).
