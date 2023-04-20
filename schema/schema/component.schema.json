@@ -52,6 +52,12 @@
         }
       ]
     },
+    "virtual": {
+      "title": "Virtual Component Class",
+      "description": "If true, this property indicates that the component is an abstract or virtual base class and not directly instantiable.",
+      "type": "boolean",
+      "default": false
+    },
     "inputs": {
       "title": "Component Input Signals",
       "description": "The fixed input signals (subscriptions) of the component.",
