@@ -13,7 +13,7 @@ jobs:
 
   check-hash:
     runs-on: ubuntu-latest
-    name: Check hashes of ros2-modulo images
+    name: Check hashes of ros2-modulo-control images
     outputs:
       latest_hash: ${{ steps.check-humble.outputs.id }}
       devel_hash: ${{ steps.check-humble-devel.outputs.id }}
@@ -28,29 +28,29 @@ jobs:
         id: ci-branch
         run: BRANCH=${{ env.CI_BRANCH }} && echo "ci_branch=${BRANCH}" >> $GITHUB_OUTPUT
 
-      - name: Check hash of ros2-modulo:humble image
+      - name: Check hash of ros2-modulo-control:humble image
         id: check-humble
         run: |
-          curl -o ros2-modulo-humble-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-hash
-          NEW_HASH=$(cat ./ros2-modulo-humble-hash || echo '')
+          curl -o ros2-modulo-control-humble-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo_control/humble-hash
+          NEW_HASH=$(cat ./ros2-modulo-control-humble-hash || echo '')
           OLD_HASH=$(cat ./humble-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
-            echo "The ros2-modulo:humble image did not change."
+            echo "The ros2-modulo-control:humble image did not change."
           else
-            echo "ros2-modulo:humble image has been updated, rebuilding image now..."
+            echo "ros2-modulo-control:humble image has been updated, rebuilding image now..."
             echo "id=${NEW_HASH}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check latest hash on ros2-modulo:humble-devel image
+      - name: Check latest hash on ros2-modulo-control:humble-devel image
         id: check-humble-devel
         run: |
-          curl -o ros2-modulo-humble-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo/humble-devel-hash
-          NEW_HASH=$(cat ./ros2-modulo-humble-devel-hash || echo '')
+          curl -o ros2-modulo-control-humble-devel-hash https://raw.githubusercontent.com/aica-technology/docker-images/ci/ros2_modulo_control/humble-devel-hash
+          NEW_HASH=$(cat ./ros2-modulo-control-humble-devel-hash || echo '')
           OLD_HASH=$(cat ./humble-devel-hash || echo '')
           if [ "${NEW_HASH}" = "${OLD_HASH}" ]; then
-            echo "The ros2-modulo:humble-devel image did not change."
+            echo "The ros2-modulo-control:humble-devel image did not change."
           else
-            echo "ros2-modulo:humble-devel image has been updated, rebuilding image now..."
+            echo "ros2-modulo-control:humble-devel image has been updated, rebuilding image now..."
             echo "id=${NEW_HASH}" >> $GITHUB_OUTPUT
           fi
 
@@ -85,7 +85,7 @@ jobs:
   write-latest-hash:
     needs: [ check-hash, build-publish-latest ]
     uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
-    name: Write ros2-modulo:humble hash to file
+    name: Write ros2-modulo-control:humble hash to file
     with:
       content: ${{ needs.check-hash.outputs.latest_hash }}
       filepath: ./humble-hash
@@ -94,7 +94,7 @@ jobs:
   write-devel-hash:
     needs: [ check-hash, build-publish-devel ]
     uses: aica-technology/.github/.github/workflows/write-file.yml@v0.1
-    name: Write ros2-modulo:humble-devel hash to file
+    name: Write ros2-modulo-control:humble-devel hash to file
     with:
       content: ${{ needs.check-hash.outputs.devel_hash }}
       filepath: ./humble-devel-hash
