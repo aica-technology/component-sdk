@@ -1,3 +1,17 @@
+📖 Archiver's note 📖
+
+This repository has been superceded by other resources and is no longer maintained.
+
+In place of this repository, use the new component template to create a new component package.
+- https://github.com/aica-technology/component-template
+
+Please refer to the API repository for documentation, schemas and public issues.
+- https://github.com/aica-technology/api
+
+The original content of this repository is preserved below.
+
+---
+
 # AICA Component SDK
 
 A software development kit for creating custom components for AICA applications.
